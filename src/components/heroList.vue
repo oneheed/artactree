@@ -4,7 +4,7 @@
     @click.right="rclick"
     ref="wrapper"
   >
-    <div v-for="heroType in heroTypeList" :key="heroType" :class="heroTypeClass">
+    <div v-for="heroType in fliterHeroTypeList" :key="heroType" :class="heroTypeClass">
       <div
         v-for="hero in filterHeroByType(heroType)"
         :key="hero.id"
@@ -68,6 +68,9 @@ export default {
           : 24;
       return w + 'px';
     },
+    fliterHeroTypeList() {
+      return this.opts.gamemode ? this.heroTypeList : ['all'];
+    },
     heroTypeClass() {
       return this.opts.gamemode && !this.opts.horizon ? 'gamemode-heroType' : 'heroType';
     },
@@ -91,7 +94,7 @@ export default {
   },
   methods: {
     filterHeroByType(type) {
-      return this.heros.filter((hero) => hero.type === type);
+      return this.heros.filter((hero) => 'all' === type || hero.type === type);
     },
     adjustHeight(e) {
       // iconW:iconH = 14:5
@@ -225,6 +228,12 @@ export default {
     'opts.iconWidth'() {
       this.adjustHeight();
     },
+    'opts.gamemode'() {
+      this.adjustHeight();
+    },
+    'opts.horizon'() {
+      this.adjustHeight();
+    },
   },
 };
 </script>
@@ -240,14 +249,7 @@ export default {
   display: inline-block;
   vertical-align: text-top;
 }
-.heroType {
-  display: inline;
-}
 .v-card {
   max-height: calc(100vh - 128px);
-}
-.heroType-item {
-  display: inline-block;
-  margin-right: 10px;
 }
 </style>
